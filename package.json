@@ -1,0 +1,23 @@
+{
+  "name": "sde-test1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "runner": "sde init sde-test1",
+    "push": "sde deploy",
+    "push-local": "sde deploy --local",
+    "local": "sde run --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "serverless-docker-ecs": "link:..\\serverless-docker-ecs",
+    "prettier": "^3.3.2"
+  }
+}
