@@ -1,0 +1,636 @@
+{
+ "Resources": {
+  "TaskExecutionRole250D2532": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/TaskExecutionRole/Resource"
+   }
+  },
+  "TaskExecutionRoleDefaultPolicyA84DD1B0": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "sdetest1serverA72CA07C",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "sdetest1Definitionsdetest1LogGroup63B2A50F",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TaskExecutionRoleDefaultPolicyA84DD1B0",
+    "Roles": [
+     {
+      "Ref": "TaskExecutionRole250D2532"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/TaskExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "TaskRole30FC0FBB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/TaskRole/Resource"
+   }
+  },
+  "TaskRoleDefaultPolicy07FC53DE": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
+        "ecs:ListServices",
+        "ec2:DescribeNetworkInterfaces"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TaskRoleDefaultPolicy07FC53DE",
+    "Roles": [
+     {
+      "Ref": "TaskRole30FC0FBB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/TaskRole/DefaultPolicy/Resource"
+   }
+  },
+  "sdetest1ClusterB610195F": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterName": "sde-test1-cluster"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Cluster/Resource"
+   }
+  },
+  "CnameRecordWildcardB12E7F59": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04016231YNZ02E3V4Y2F",
+    "Name": "*.quickga.me.",
+    "ResourceRecords": [
+     "horse.quickga.me"
+    ],
+    "TTL": "1800",
+    "Type": "CNAME"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/CnameRecordWildcard/Resource"
+   }
+  },
+  "sdetest1DefinitionA86F08A1": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Cpu": 128,
+      "EntryPoint": [
+       "node",
+       "index.js"
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         {
+          "Fn::Select": [
+           4,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::GetAtt": [
+               "sdetest1serverA72CA07C",
+               "Arn"
+              ]
+             }
+            ]
+           }
+          ]
+         },
+         ".dkr.ecr.",
+         {
+          "Fn::Select": [
+           3,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::GetAtt": [
+               "sdetest1serverA72CA07C",
+               "Arn"
+              ]
+             }
+            ]
+           }
+          ]
+         },
+         ".",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/",
+         {
+          "Ref": "sdetest1serverA72CA07C"
+         },
+         ":latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "sdetest1Definitionsdetest1LogGroup63B2A50F"
+        },
+        "awslogs-stream-prefix": "sde-test1-sde-test1",
+        "awslogs-region": "us-west-2"
+       }
+      },
+      "Name": "sde-test1",
+      "PortMappings": [
+       {
+        "ContainerPort": 3000,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "TaskExecutionRole250D2532",
+      "Arn"
+     ]
+    },
+    "Family": "sdetest1sdetest1Definition1AC7C9C7",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "TaskRole30FC0FBB",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Definition/Resource"
+   }
+  },
+  "sdetest1Definitionsdetest1LogGroup63B2A50F": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 1
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Definition/sde-test1/LogGroup/Resource"
+   }
+  },
+  "sdetest1serverA72CA07C": {
+   "Type": "AWS::ECR::Repository",
+   "Properties": {
+    "EmptyOnDelete": true,
+    "RepositoryName": "sde-test1-server"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1-server/Resource"
+   }
+  },
+  "sdetest1sg6F26E3CE": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Allow TCP 1024-65536",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": "vpc-06226d9bcb15e66d1"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1-sg/Resource"
+   }
+  },
+  "sdetest1sgfromsdetest1sdetest1ServiceLBSecurityGroup2D9E51F53000EB23E09B": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "FromPort": 3000,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "sdetest1sg6F26E3CE",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "sdetest1ServiceLBSecurityGroupFE53CE33",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3000
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1-sg/from sdetest1sdetest1ServiceLBSecurityGroup2D9E51F5:3000"
+   }
+  },
+  "sdetest1ServiceLBEABBCA0C": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "sdetest1ServiceLBSecurityGroupFE53CE33",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     "subnet-0f3d6402e8b27f1c6",
+     "subnet-0c6f2bcc3e38f35e2"
+    ],
+    "Type": "application"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/LB/Resource"
+   }
+  },
+  "sdetest1ServiceLBSecurityGroupFE53CE33": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB sdetest1sdetest1ServiceLBEB58D2BD",
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 443",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": "vpc-06226d9bcb15e66d1"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/LB/SecurityGroup/Resource"
+   }
+  },
+  "sdetest1ServiceLBSecurityGrouptosdetest1sdetest1sg432A1A1F3000C65C90C6": {
+   "Type": "AWS::EC2::SecurityGroupEgress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "DestinationSecurityGroupId": {
+     "Fn::GetAtt": [
+      "sdetest1sg6F26E3CE",
+      "GroupId"
+     ]
+    },
+    "FromPort": 3000,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "sdetest1ServiceLBSecurityGroupFE53CE33",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "ToPort": 3000
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/LB/SecurityGroup/to sdetest1sdetest1sg432A1A1F:3000"
+   }
+  },
+  "sdetest1ServiceLBPublicListenerCAAB1821": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "Certificates": [
+     {
+      "CertificateArn": "arn:aws:acm:us-west-2:388098074003:certificate/fa3f6d37-1580-441b-a207-221a8d0579bf"
+     }
+    ],
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "sdetest1ServiceLBPublicListenerECSGroup5EFCAC15"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "sdetest1ServiceLBEABBCA0C"
+    },
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/LB/PublicListener/Resource"
+   }
+  },
+  "sdetest1ServiceLBPublicListenerECSGroup5EFCAC15": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/",
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": "vpc-06226d9bcb15e66d1"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/LB/PublicListener/ECSGroup/Resource"
+   }
+  },
+  "sdetest1ServiceLBPublicRedirectListener76E0FCF2": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "RedirectConfig": {
+       "Port": "443",
+       "Protocol": "HTTPS",
+       "StatusCode": "HTTP_301"
+      },
+      "Type": "redirect"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "sdetest1ServiceLBEABBCA0C"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/LB/PublicRedirectListener/Resource"
+   }
+  },
+  "sdetest1ServiceDNS932E4DAE": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "sdetest1ServiceLBEABBCA0C",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "sdetest1ServiceLBEABBCA0C",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z04016231YNZ02E3V4Y2F",
+    "Name": "horse.quickga.me.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/DNS/Resource"
+   }
+  },
+  "sdetest1Service74D3A874": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "sdetest1ClusterB610195F"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "sde-test1",
+      "ContainerPort": 3000,
+      "TargetGroupArn": {
+       "Ref": "sdetest1ServiceLBPublicListenerECSGroup5EFCAC15"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "ENABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "sdetest1sg6F26E3CE",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       "subnet-0f3d6402e8b27f1c6",
+       "subnet-0c6f2bcc3e38f35e2"
+      ]
+     }
+    },
+    "ServiceName": "sde-test1",
+    "TaskDefinition": {
+     "Ref": "sdetest1DefinitionA86F08A1"
+    }
+   },
+   "DependsOn": [
+    "sdetest1ServiceLBPublicListenerECSGroup5EFCAC15",
+    "sdetest1ServiceLBPublicListenerCAAB1821",
+    "TaskRoleDefaultPolicy07FC53DE",
+    "TaskRole30FC0FBB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/sde-test1Service/Service/Service"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31SXW/CMAz8LbyHDDom7ZWxD01C2lR4RyY1lSEkleOAUNT/PrWlqGLTnnJ3Pic+K5mezp71dATnMDbFYWxpq9NKwBxUjsFHNqjgHDaJ4KhT7i2qxc6157e3ZC4N7VCt0ASdFjYGQW70Hr4DlyC4hnB4xR05EvKuMdwr3gmQQx5o194V8olM+/gV1op9FHx61Gnh4Ig5Gs9FO12LVihq3sFaWV8GnZa+/GAfq8bU42Zq1inHygcSz5fuhp415UynFZrIJJdb+//CpysZQ/ilv7Vyu6hNBSLILuh5VVky0KRdeihewIIzWNwFRwtByFgPxbZ1kCtPmU5/d3MXccCHPgqC7urp8aC+Bi5RbskGtK4b4StKFaXbU/dFauV8gXofHk7ZRE9nejLaB6IxRyd0RJ135w9O71HgbQIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "sde-test1/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "sdetest1ServiceLoadBalancerDNSA5A4DE1D": {
+   "Value": {
+    "Fn::GetAtt": [
+     "sdetest1ServiceLBEABBCA0C",
+     "DNSName"
+    ]
+   }
+  },
+  "sdetest1ServiceServiceURLAC4F15E1": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "sdetest1ServiceDNS932E4DAE"
+      }
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

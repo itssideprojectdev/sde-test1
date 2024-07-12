@@ -1,0 +1,125 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "sde-test2.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "sde-test2.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "sde-test2": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://388098074003/us-west-2",
+      "properties": {
+        "templateFile": "sde-test2.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::388098074003:role/cdk-hnb659fds-deploy-role-388098074003-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::388098074003:role/cdk-hnb659fds-cfn-exec-role-388098074003-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-388098074003-us-west-2/375a96a53b5e17196226de844da9843c39b8bd2ac3b6b2d691baa5cf6c310a25.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "sde-test2.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::388098074003:role/cdk-hnb659fds-lookup-role-388098074003-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "sde-test2.assets"
+      ],
+      "metadata": {
+        "/sde-test2/TaskExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskExecutionRole250D2532"
+          }
+        ],
+        "/sde-test2/TaskExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskExecutionRoleDefaultPolicyA84DD1B0"
+          }
+        ],
+        "/sde-test2/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskRole30FC0FBB"
+          }
+        ],
+        "/sde-test2/TaskRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TaskRoleDefaultPolicy07FC53DE"
+          }
+        ],
+        "/sde-test2/sde-test2Cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sdetest2ClusterE94F912F"
+          }
+        ],
+        "/sde-test2/CnameRecordWildcard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CnameRecordWildcardB12E7F59"
+          }
+        ],
+        "/sde-test2/sde-test2Definition/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sdetest2Definition6096FB7D"
+          }
+        ],
+        "/sde-test2/sde-test2Definition/sde-test2/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sdetest2Definitionsdetest2LogGroup3968FACC"
+          }
+        ],
+        "/sde-test2/sde-test2-server/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sdetest2serverC51BE83B"
+          }
+        ],
+        "/sde-test2/sde-test2-sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "sdetest2sgE2D66384"
+          }
+        ],
+        "/sde-test2/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/sde-test2/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/sde-test2/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "sde-test2"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

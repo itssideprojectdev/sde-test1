@@ -1,0 +1,598 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "sde-test2": {
+        "id": "sde-test2",
+        "path": "sde-test2",
+        "children": {
+          "VPC": {
+            "id": "VPC",
+            "path": "sde-test2/VPC",
+            "children": {
+              "ingressSubnet1": {
+                "id": "ingressSubnet1",
+                "path": "sde-test2/VPC/ingressSubnet1",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.148.1"
+                }
+              },
+              "ingressSubnet2": {
+                "id": "ingressSubnet2",
+                "path": "sde-test2/VPC/ingressSubnet2",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.148.1"
+                }
+              },
+              "applicationSubnet1": {
+                "id": "applicationSubnet1",
+                "path": "sde-test2/VPC/applicationSubnet1",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.148.1"
+                }
+              },
+              "applicationSubnet2": {
+                "id": "applicationSubnet2",
+                "path": "sde-test2/VPC/applicationSubnet2",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.148.1"
+            }
+          },
+          "TaskExecutionRole": {
+            "id": "TaskExecutionRole",
+            "path": "sde-test2/TaskExecutionRole",
+            "children": {
+              "ImportTaskExecutionRole": {
+                "id": "ImportTaskExecutionRole",
+                "path": "sde-test2/TaskExecutionRole/ImportTaskExecutionRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.148.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/TaskExecutionRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "ecs-tasks.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.148.1"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "sde-test2/TaskExecutionRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sde-test2/TaskExecutionRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "ecr:BatchGetImage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "sdetest2serverC51BE83B",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": "ecr:GetAuthorizationToken",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "sdetest2Definitionsdetest2LogGroup3968FACC",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "TaskExecutionRoleDefaultPolicyA84DD1B0",
+                        "roles": [
+                          {
+                            "Ref": "TaskExecutionRole250D2532"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.148.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.148.1"
+            }
+          },
+          "TaskRole": {
+            "id": "TaskRole",
+            "path": "sde-test2/TaskRole",
+            "children": {
+              "ImportTaskRole": {
+                "id": "ImportTaskRole",
+                "path": "sde-test2/TaskRole/ImportTaskRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.148.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/TaskRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "ecs-tasks.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.148.1"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "sde-test2/TaskRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sde-test2/TaskRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "ecs:DescribeServices",
+                                "ecs:DescribeTaskDefinition",
+                                "ecs:DescribeTasks",
+                                "ecs:ListTasks",
+                                "ecs:ListServices",
+                                "ec2:DescribeNetworkInterfaces"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "TaskRoleDefaultPolicy07FC53DE",
+                        "roles": [
+                          {
+                            "Ref": "TaskRole30FC0FBB"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.148.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.148.1"
+            }
+          },
+          "sde-test2Cluster": {
+            "id": "sde-test2Cluster",
+            "path": "sde-test2/sde-test2Cluster",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/sde-test2Cluster/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECS::Cluster",
+                  "aws:cdk:cloudformation:props": {
+                    "clusterName": "sde-test2-cluster"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.CfnCluster",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecs.Cluster",
+              "version": "2.148.1"
+            }
+          },
+          "HostedZone": {
+            "id": "HostedZone",
+            "path": "sde-test2/HostedZone",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.148.1"
+            }
+          },
+          "CnameRecordWildcard": {
+            "id": "CnameRecordWildcard",
+            "path": "sde-test2/CnameRecordWildcard",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/CnameRecordWildcard/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                  "aws:cdk:cloudformation:props": {
+                    "hostedZoneId": "Z04016231YNZ02E3V4Y2F",
+                    "name": "*.quickga.me.",
+                    "resourceRecords": [
+                      "horse.quickga.me"
+                    ],
+                    "ttl": "1800",
+                    "type": "CNAME"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_route53.CnameRecord",
+              "version": "2.148.1"
+            }
+          },
+          "Cert": {
+            "id": "Cert",
+            "path": "sde-test2/Cert",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.148.1"
+            }
+          },
+          "sde-test2Definition": {
+            "id": "sde-test2Definition",
+            "path": "sde-test2/sde-test2Definition",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/sde-test2Definition/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECS::TaskDefinition",
+                  "aws:cdk:cloudformation:props": {
+                    "containerDefinitions": [
+                      {
+                        "cpu": 128,
+                        "entryPoint": [
+                          "node",
+                          "index.js"
+                        ],
+                        "essential": true,
+                        "image": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              {
+                                "Fn::Select": [
+                                  4,
+                                  {
+                                    "Fn::Split": [
+                                      ":",
+                                      {
+                                        "Fn::GetAtt": [
+                                          "sdetest2serverC51BE83B",
+                                          "Arn"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              ".dkr.ecr.",
+                              {
+                                "Fn::Select": [
+                                  3,
+                                  {
+                                    "Fn::Split": [
+                                      ":",
+                                      {
+                                        "Fn::GetAtt": [
+                                          "sdetest2serverC51BE83B",
+                                          "Arn"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              ".",
+                              {
+                                "Ref": "AWS::URLSuffix"
+                              },
+                              "/",
+                              {
+                                "Ref": "sdetest2serverC51BE83B"
+                              },
+                              ":latest"
+                            ]
+                          ]
+                        },
+                        "name": "sde-test2",
+                        "portMappings": [
+                          {
+                            "containerPort": 3000,
+                            "protocol": "tcp"
+                          }
+                        ],
+                        "logConfiguration": {
+                          "logDriver": "awslogs",
+                          "options": {
+                            "awslogs-group": {
+                              "Ref": "sdetest2Definitionsdetest2LogGroup3968FACC"
+                            },
+                            "awslogs-stream-prefix": "sde-test2-sde-test2",
+                            "awslogs-region": "us-west-2"
+                          }
+                        }
+                      }
+                    ],
+                    "cpu": "256",
+                    "executionRoleArn": {
+                      "Fn::GetAtt": [
+                        "TaskExecutionRole250D2532",
+                        "Arn"
+                      ]
+                    },
+                    "family": "sdetest2sdetest2Definition2588B8BA",
+                    "memory": "512",
+                    "networkMode": "awsvpc",
+                    "requiresCompatibilities": [
+                      "FARGATE"
+                    ],
+                    "taskRoleArn": {
+                      "Fn::GetAtt": [
+                        "TaskRole30FC0FBB",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.CfnTaskDefinition",
+                  "version": "2.148.1"
+                }
+              },
+              "sde-test2": {
+                "id": "sde-test2",
+                "path": "sde-test2/sde-test2Definition/sde-test2",
+                "children": {
+                  "LogGroup": {
+                    "id": "LogGroup",
+                    "path": "sde-test2/sde-test2Definition/sde-test2/LogGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "sde-test2/sde-test2Definition/sde-test2/LogGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "retentionInDays": 1
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                          "version": "2.148.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+                      "version": "2.148.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.ContainerDefinition",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecs.FargateTaskDefinition",
+              "version": "2.148.1"
+            }
+          },
+          "sde-test2-server": {
+            "id": "sde-test2-server",
+            "path": "sde-test2/sde-test2-server",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/sde-test2-server/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "emptyOnDelete": true,
+                    "repositoryName": "sde-test2-server"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecr.CfnRepository",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecr.Repository",
+              "version": "2.148.1"
+            }
+          },
+          "sde-test2-sg": {
+            "id": "sde-test2-sg",
+            "path": "sde-test2/sde-test2-sg",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sde-test2/sde-test2-sg/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "groupDescription": "Allow TCP 1024-65536",
+                    "securityGroupEgress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "description": "Allow all outbound traffic by default",
+                        "ipProtocol": "-1"
+                      }
+                    ],
+                    "vpcId": "vpc-06226d9bcb15e66d1"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+              "version": "2.148.1"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "sde-test2/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "sde-test2/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.148.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "sde-test2/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.148.1"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "sde-test2/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.148.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.148.1"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.148.1"
+    }
+  }
+}

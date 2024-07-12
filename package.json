@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "runner": "sde init sde-test1",
+    "setup-aws": "sde setup-aws --firstTime",
+    "deploy-aws": "sde setup-aws",
     "push": "sde deploy",
     "push-local": "sde deploy --local",
+    "destroy-aws": "sde destroy-aws",
     "local": "sde run --watch"
   },
   "keywords": [],
